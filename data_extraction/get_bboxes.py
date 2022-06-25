@@ -8,7 +8,7 @@ from pymongo import MongoClient
 # myclient = pymongo.MongoClient("Aquí Incluir nuestro MONGO") #TODO
 # mydb = myclient["Inlcuir nombre de la base de datos"]  #TODO
 # mysearch = mydb["nombre de la colección a traernos"]   #TODO
-# mydoc = mysearch.find(Incluimos la query que necesitemos)  #TODO
+# city_info = mysearch.find(Incluimos la query que necesitemos)  #TODO
 
 city_info = [{    #Sustituiremos esto por la llamada al MONGO 
 
