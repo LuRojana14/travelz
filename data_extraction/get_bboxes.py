@@ -3,8 +3,14 @@ import numpy as np
 import requests
 from pathlib import Path
 import json
+from pymongo import MongoClient 
 
-city = [{    #Aqui meteremos la llamada al MONGO #TODO
+# myclient = pymongo.MongoClient("Aquí Incluir nuestro MONGO") #TODO
+# mydb = myclient["Inlcuir nombre de la base de datos"]  #TODO
+# mysearch = mydb["nombre de la colección a traernos"]   #TODO
+# mydoc = mysearch.find(Incluimos la query que necesitemos)  #TODO
+
+city_info = [{    #Sustituiremos esto por la llamada al MONGO 
 
     "name": "Madrid", 
 
@@ -42,18 +48,18 @@ city = [{    #Aqui meteremos la llamada al MONGO #TODO
 
 dff = pd.DataFrame()
 i = 0
-for item in city:
+for item in city_info:
     item.update( {"POIS":""})
 
-for i in range(len(city)):
+for i in range(len(city_info)):
 
-    for key in city[i]:
+    for key in city_info[i]:
 
-        name = city[i]["name"]
-        country = city[i]["country"]
-        lat = float(city[i]["lat"])
-        lon = float(city[i]["lon"])
-        population = city[i]["population"]
+        name = city_info[i]["name"]
+        country = city_info[i]["country"]
+        lat = float(city_info[i]["lat"])
+        lon = float(city_info[i]["lon"])
+        population = city_info[i]["population"]
         lat_max = lat+0.1
         lat_min = lat-0.1
         lon_max = lon+0.1
@@ -63,19 +69,22 @@ for i in range(len(city)):
         url = f"https://api.opentripmap.com/0.1/en/places/bbox?apikey=5ae2e3f221c38a28845f05b6a409d09f601e71c512bebd50adbc3222&lon_min={lon_min}&lon_max={lon_max}&lat_min={lat_min}&lat_max={lat_max}&limit=100"
         r = requests.get(url)
         POIS = r.json()
-        city[i].update({'POIS':POIS})
+        city_info[i].update({'POIS':POIS})
 
 
-
+#para comporbar en excel que datos tenemos en la colección
     dfi = pd.DataFrame(np.array([[name, country, lat,lon,population,lat_max,lat_min,lon_max,lon_min,POIS]]),columns=['name', 'country', 'lat', 'lon','population','lat_max','lat_min','lon_max','lon_min','POIS'])
     dff = dff.append(dfi)        
-
-    print(dff)
-
-
-# conectar a MONGO #TODO
 
 filepath = Path('C:\\Users/34649/OneDrive/Escritorio/Proyecto_final/out.xls')  
 filepath.parent.mkdir(parents=True, exist_ok=True)  
 dff.to_excel(filepath)  
+
+
+# Crear colección en MONGO e insertar la info #TODO
+# mycol = mydb["city_info"]
+# 
+# insert_db = mycol.insert_one(city_info)"]
+
+
 
