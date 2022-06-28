@@ -45,9 +45,9 @@ city_info = [{
 
 }] 
 
+#prueba de concepto creando la colección antes de llamar
 
 mycol = mydb["city_info"] 
- #prueba de concepto creando la colección antes de llamar
 x = mycol.insert_many(city_info)
 mycol = mydb["city_info"] 
 
@@ -59,9 +59,8 @@ city_info = list(x)  #TODO
 
 
 for i in range(len(city_info)):
-
-    for key in city_info[i]:
-
+        
+        city_info_POIS = []
         name = city_info[i]["name"]
         country = city_info[i]["country"]
         lat = float(city_info[i]["lat"])
@@ -76,15 +75,18 @@ for i in range(len(city_info)):
         url = f"https://api.opentripmap.com/0.1/en/places/bbox?apikey=5ae2e3f221c38a28845f05b6a409d09f601e71c512bebd50adbc3222&lon_min={lon_min}&lon_max={lon_max}&lat_min={lat_min}&lat_max={lat_max}&limit=100"
         r = requests.get(url)
         POIS = r.json()
-        #city_info_POIS[i].update({'POIS':POIS})
+        POIS["City_Name"] = name
         city_info_POIS = POIS
+        mycol_2 = mydb["city_info_POIS"]
+        insert_db_2 = mycol_2.insert_one(city_info_POIS)
 
-# del city_info_POIS[i]['_id']
 
-# Crear colección en MONGO e insertar la info #TODO
-mycol_2 = mydb["city_info_POIS"]
 
-insert_db_2 = mycol_2.insert_one(city_info_POIS)
+
+
+
+
+
 
 
 
