@@ -26,12 +26,14 @@ spain_cities = df["NOMBRE"]
 
 
 for city in tqdm(spain_cities):
+    mongo_result = list(col.find({"name": city}))
+    if len(mongo_result) != 0:
+        continue
     response = requests.get(url + city)
     if response.status_code == 200:
         data = response.json()
         col.insert_one(data)
     else:
         print("Error")
-    time.sleep(1)
-
+    time.sleep(0.5)
 
