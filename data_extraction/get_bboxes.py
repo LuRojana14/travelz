@@ -5,11 +5,11 @@ import requests
 from pymongo import MongoClient
 
 
-myclient = pymongo.MongoClient(host="localhost", port=27017) #TODO
-mydb = myclient["Prueba_concepto_travelz"]  #TODO
+myclient = pymongo.MongoClient(host="localhost", port=27017) # Poner el mongo del proyecto TODO
+mydb = myclient["Prueba_concepto_travelz"]  #Poner la BBDD del proyecto TODO
 
 
-city_info = [{
+city_info = [{   # de esta linea a la 52 irá fuera (son mis pruebas locales)
 
     "name": "Madrid", 
 
@@ -45,17 +45,16 @@ city_info = [{
 
 }] 
 
-#prueba de concepto creando la colección antes de llamar
+
 
 mycol = mydb["city_info"] 
-x = mycol.insert_many(city_info)
-mycol = mydb["city_info"] 
+x = mycol.insert_many(city_info)  #prueba de concepto creando la colección antes de llamar
+
+
+mycol = mydb["city_info"]  # incluir nombre de la colleción de la bbdd del proyecto
 
 x = mycol.find()
 city_info = list(x)  #TODO
-
-
-# city_info = mysearch.find(Incluimos la query que necesitemos en caso de necesitarla)  #TODO
 
 
 for i in range(len(city_info)):
@@ -76,15 +75,15 @@ for i in range(len(city_info)):
         r = requests.get(url)
         POIS = r.json()
         POIS["City_Name"] = name
+        i=0
+        for key in POIS["features"]:
+            POIS["features"][i]["properties"]["kinds"] = POIS["features"][i]["properties"]["kinds"].replace("_"," ")
+            POIS["features"][i]["properties"]["kinds"] = POIS["features"][i]["properties"]["kinds"].split(",")
+            i+=1
         city_info_POIS = POIS
         mycol_2 = mydb["city_info_POIS"]
         insert_db_2 = mycol_2.insert_one(city_info_POIS)
-
-
-
-
-
-
+            
 
 
 
