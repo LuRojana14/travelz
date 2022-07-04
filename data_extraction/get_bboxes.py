@@ -27,6 +27,7 @@ for i in tqdm(range(len(city_info))):
     country = city_info[i]["country"]
     lat = float(city_info[i]["lat"])
     lon = float(city_info[i]["lon"])
+    population = city_info[i].get("population", 0)
     lat_max = lat + 0.1
     lat_min = lat - 0.1
     lon_max = lon + 0.1
@@ -53,5 +54,5 @@ for i in tqdm(range(len(city_info))):
 mycol = mydb["city_info"]  # incluir nombre de la colleción de la bbdd del proyecto
 
 x = mycol.find()
-city_info = list(x)  #TODO
+city_info = list(x)  # TODO
 
