@@ -50,6 +50,8 @@ for i in tqdm(range(len(city_info))):
     insert_db_2 = mycol_2.insert_one(city_info_POIS)
     time.sleep(1)
 
+mycol = mydb["city_info"]  # incluir nombre de la colleción de la bbdd del proyecto
 
-# city_info = mysearch.find(Incluimos la query que necesitemos en caso de necesitarla)  #TODO
+x = mycol.find()
+city_info = list(x)  #TODO
 
