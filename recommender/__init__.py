@@ -11,6 +11,7 @@ import json
 nlp = spacy.load("es_core_news_md") 
 
 
+
 # ============================================================================= 
 
 # Fase 1, extraer palabras clave y localización 
@@ -23,17 +24,29 @@ doc = nlp(query_user)
 
 spacy.displacy.render(doc) #pintar el esquema. No hace falta
 
-for tok in doc:
 
+List_noun_ = []
+for tok in doc:
+    
     if tok.pos_ == "NOUN":
-        noun_ = str(tok)
-        print(noun_)
+        noun_1 = str(tok)
+        List_noun_.append(noun_1)
+
+        print(List_noun_)
     else:
         if tok.pos_ == "VERB":
             noun_ = str(tok)
             print(noun_)
 
-#Matcher para buscar patrones ( relaciones nombres con obj adj y guardar varios nouns)
+List_adj_ = []
+for tok in doc:
+    
+    if tok.pos_ == "ADJ":
+        adj_1 = str(tok)
+        List_adj_.append(adj_1)
+
+        print(List_adj_)
+
 
 for ent in doc.ents: 
 
@@ -41,6 +54,7 @@ for ent in doc.ents:
         ent_ = str(tok).capitalize()
 
         print(ent)  
+
 
 
 # ============================================================================= 
@@ -55,7 +69,7 @@ for ent in doc.ents:
 
 url = "C:\\Users/34649/OneDrive/Escritorio/Proyecto_final/travelz/translations_enTo_es - translations.csv"  # poner url proyecto TODO
 csv = pd.read_csv(url)  
-X = np.array( [ nlp("").vector, ] ) 
+X = np.array( [ nlp("esto es un vector de inicio").vector, ] ) 
 df_kinds = pd.DataFrame()
 j=0
 for i in csv["spanish_words"]:
@@ -74,31 +88,60 @@ nn = NearestNeighbors(n_neighbors=1)
 
 nn.fit(X) 
 
-test_word = nlp(noun_).vector.reshape(1, -1) 
+List_kind_ = []
+for i in  List_noun_:
 
-Result = list(nn.kneighbors(test_word))
-Result = Result[1]
-Result = Result[0]
-Result = int(Result[0])
+    test_word = nlp(i).vector.reshape(1, -1) 
+
+    Result = list(nn.kneighbors(test_word))
+    Result = Result[1]
+    Result = Result[0]
+    Result = int(Result[0])
+    Result = Result -1
+
+    print(f"este numero es: {Result}")  #numero del array resultante como más similar (para pruebas)
+
+    kind_result = df_kinds.query(f"id_ == {Result}")
+    kind_result= kind_result["kind"]
+    kind_result = dict(kind_result)
+    kind_result_es = kind_result[Result]  # kind clave
+
+    kind_result_en = list(csv.loc[Result:Result,"english_words",])[0]
+    loc_ = ent_
+
+    print(f"el lugar elegido es:{loc_} y la actividad: {kind_result_es} que en inglés es:{kind_result_en}  ")
+    
+    List_kind_.append(kind_result_en)
+
+for i in  List_adj_:
+
+    test_word = nlp(i).vector.reshape(1, -1) 
+
+    Result = list(nn.kneighbors(test_word))
+    Result = Result[1]
+    Result = Result[0]
+    Result = int(Result[0])
+    Result = Result -1
+
+    print(f"este numero es: {Result}")  #numero del array resultante como más similar (para pruebas)
+
+    kind_result = df_kinds.query(f"id_ == {Result}")
+    kind_result= kind_result["kind"]
+    kind_result = dict(kind_result)
+    kind_result_es = kind_result[Result]  # kind clave
+
+    kind_result_en = list(csv.loc[Result:Result,"english_words",])[0]
+    loc_ = ent_
+
+    print(f"el lugar elegido es:{loc_} y la actividad: {kind_result_es} que en inglés es:{kind_result_en}  ")
+    
+    List_kind_.append(kind_result_en)
 
 
-print(f"este numero es: {Result}")  #numero del array resultante como más similar (para pruebas)
+#  Variables de lugar y kinds:
 
-
-kind_result = df_kinds.query(f"id_ == {Result}")
-kind_result= kind_result["kind"]
-kind_result = dict(kind_result)
-kind_result = kind_result[Result]  # kind clave
-
-
-
-
-
-
-
-
-
-
+loc_
+List_kind_
 
 
 
