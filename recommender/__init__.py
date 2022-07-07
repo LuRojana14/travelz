@@ -23,7 +23,7 @@ doc = nlp(query_user)
 
 spacy.displacy.render(doc) #pintar el esquema. No hace falta
 
-for tok in doc: 
+for tok in doc:
 
     if tok.pos_ == "NOUN":
         noun_ = str(tok)
@@ -33,7 +33,7 @@ for tok in doc:
             noun_ = str(tok)
             print(noun_)
 
-#Matcher para buscar patrones ()
+#Matcher para buscar patrones ( relaciones nombres con obj adj y guardar varios nouns)
 
 for ent in doc.ents: 
 
@@ -55,13 +55,13 @@ for ent in doc.ents:
 
 # Loop para meter vectores en el array y crear un df para ver que vector es el mejor (Ojo saltar error si no encuentra el vector)
 
-JSON = []  #esto será el archivo JSON con las traducciones TODO
+csv = []  #esto será el archivo csv con las traducciones TODO
 X = np.array( [ ] ) 
 df_kinds = pd.DataFrame()
 i=0
-for i in {JSON}:
-    y = np.array( [nlp("prueba").vector])  # en prueba debe coger el kind  del JSON traducido TODO
-    df2_kinds = pd.DataFrame({"id_":[i],"kind":f"prueba{i}"})  # en prueba debe coger el kind  del JSON traducido TODO
+for i in {csv}:
+    y = np.array( [nlp(noun_).vector])  # en prueba debe coger el kind  del csv traducido TODO
+    df2_kinds = pd.DataFrame({"id_":[i],"kind":f"{noun_}","city":f"{ent_}"})  # en prueba debe coger el kind  del JSON traducido TODO
     df_kinds = df_kinds.append(df2_kinds,ignore_index = True)
     X = np.append(X,y, axis=0)
     i+=1
