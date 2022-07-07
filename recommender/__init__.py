@@ -50,21 +50,21 @@ for ent in doc.ents:
 # ============================================================================= 
 
 
-#traer kinds traducidos del archivo JSON (Lourdes)   TODO
 
+# Loop para meter vectores en el array y crear un df para ver que vector es el mejor
 
-# Loop para meter vectores en el array y crear un df para ver que vector es el mejor (Ojo saltar error si no encuentra el vector)
-
-csv = []  #esto será el archivo csv con las traducciones TODO
-X = np.array( [ ] ) 
+url = "C:\\Users/34649/OneDrive/Escritorio/Proyecto_final/travelz/translations_enTo_es - translations.csv"  # poner url proyecto TODO
+csv = pd.read_csv(url)  
+X = np.array( [ nlp("").vector, ] ) 
 df_kinds = pd.DataFrame()
-i=0
-for i in {csv}:
-    y = np.array( [nlp(noun_).vector])  # en prueba debe coger el kind  del csv traducido TODO
-    df2_kinds = pd.DataFrame({"id_":[i],"kind":f"{noun_}","city":f"{ent_}"})  # en prueba debe coger el kind  del JSON traducido TODO
+j=0
+for i in csv["spanish_words"]:
+
+    y = np.array( [nlp(i).vector]) 
+    df2_kinds = pd.DataFrame({"id_":[j],"kind":f"{i}","city":f"{ent_}"})  
     df_kinds = df_kinds.append(df2_kinds,ignore_index = True)
-    X = np.append(X,y, axis=0)
-    i+=1
+    X = np.append(X,y,axis =0)
+    j+=1
 
 
 
@@ -84,12 +84,35 @@ Result = int(Result[0])
 
 print(f"este numero es: {Result}")  #numero del array resultante como más similar (para pruebas)
 
-#valor resultante
 
 kind_result = df_kinds.query(f"id_ == {Result}")
 kind_result= kind_result["kind"]
 kind_result = dict(kind_result)
-kind_result = kind_result[Result] 
+kind_result = kind_result[Result]  # kind clave
 
 
-# traducir al ingles los kinds results  TODO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
